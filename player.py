@@ -42,3 +42,16 @@ class Player(CircleShape):
         self.timer = self.PLAYER_SHOOT_COOLDOWN
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+    def draw_lives(self, screen, lives):
+        for i in range(lives):
+            offset = i * (self.radius * 2 + 10)
+            points = [
+                pygame.Vector2(self.radius + offset + 25, self.radius + 35),
+                pygame.Vector2(offset + 25, self.radius * 2 + 35),
+                pygame.Vector2(self.radius * 2 + offset + 25, self.radius * 2 + 35),
+            ]
+            pygame.draw.polygon(screen, "red", points, width=0)
+    def reset(self, screen):
+        self.position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+        self.velocity = pygame.Vector2(0, 0)
+        self.rotation = 0

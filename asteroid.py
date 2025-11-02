@@ -23,3 +23,10 @@ class Asteroid(CircleShape):
             astroid1.velocity = velocity1
             astroid2 = Asteroid(self.position.x, self.position.y, new_radius)
             astroid2.velocity = velocity2
+    def points(self):
+        if self.radius >= ASTEROID_MIN_RADIUS * 3:
+            return 10
+        elif self.radius >= ASTEROID_MIN_RADIUS * 2:
+            return 20
+        else:
+            return 30
