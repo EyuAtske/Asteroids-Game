@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -6,9 +7,21 @@ from asteroidfield import AsteroidField
 from shot import Shot
 
 def main():
+    os.environ['SDL_AUDIODRIVER'] = 'dummy'
     pygame.init()
+    audio_enabled = False
+    try:
+        pygame.mixer.init()
+        audio_enabled = True
+    except pygame.error:
+        print("Warning: Audio device not found, sounds disabled")
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    background = pygame.image.load("space.jpg").convert()
+    background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    shot_sound = pygame.mixer.Sound("sounds/shot.mp3")
+    explosion_sound = pygame.mixer.Sound("sounds/explosion.mp3")
     dt = 0
     score = 0
     lives = 3
@@ -21,7 +34,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shot, updatable, drawable)
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, explosion_sound)
     af = AsteroidField()
     while lives > 0:
         run = True
@@ -33,6 +46,7 @@ def main():
             for ast in asteroids:
                 if ast.isColliding(player):
                     run = False
+                    ast.kill()
                     break
             if not run:
                 lives -= 1
@@ -41,9 +55,10 @@ def main():
                 for sh in shot:
                     if ast.isColliding(sh):
                         score += ast.points()
+                        shot_sound.play()
                         ast.split()
                         sh.kill()
-            screen.fill("black")
+            screen.blit(background, (0, 0))
             textsurface = font.render(f"SCORE: {score}", True, (255, 255, 255))
             screen.blit(textsurface, (20, 20))
             for draw in drawable:
