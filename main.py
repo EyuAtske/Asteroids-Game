@@ -5,9 +5,10 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from loadscreen import LoadScreen
 
 def main():
-    os.environ['SDL_AUDIODRIVER'] = 'dummy'
+    os.environ['SDL_AUDIODRIVER'] = 'dummy'  
     pygame.init()
     audio_enabled = False
     try:
@@ -34,40 +35,44 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shot, updatable, drawable)
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, explosion_sound)
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, shot_sound)
     af = AsteroidField()
-    while lives > 0:
-        run = True
-        while run:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return
-            updatable.update(dt)  
-            for ast in asteroids:
-                if ast.isColliding(player):
-                    run = False
-                    ast.kill()
-                    break
-            if not run:
-                lives -= 1
-                player.reset(screen)
-            for ast in asteroids:
-                for sh in shot:
-                    if ast.isColliding(sh):
-                        score += ast.points()
-                        shot_sound.play()
-                        ast.split()
-                        sh.kill()
-            screen.blit(background, (0, 0))
-            textsurface = font.render(f"SCORE: {score}", True, (255, 255, 255))
-            screen.blit(textsurface, (20, 20))
-            for draw in drawable:
-                draw.draw(screen)
-            player.draw_lives(screen, lives)
-            dt = clock.tick(60)/1000
-            pygame.display.flip()
-    print("Game Over! Final Score:", score)
-    exit(1)
+    load = LoadScreen(screen)
+    repet = load.display(score)
+    while repet.lower() == 'y':
+        repet = load.display(score)
+        while lives > 0:
+            run = True
+            while run:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        return
+                updatable.update(dt)  
+                for ast in asteroids:
+                    if ast.isColliding(player):
+                        run = False
+                        ast.kill()
+                        break
+                if not run:
+                    lives -= 1
+                    player.reset(screen)
+                for ast in asteroids:
+                    for sh in shot:
+                        if ast.isColliding(sh):
+                            score += ast.points()
+                            explosion_sound.play()
+                            ast.split()
+                            sh.kill()
+                screen.blit(background, (0, 0))
+                textsurface = font.render(f"SCORE: {score}", True, (255, 255, 255))
+                screen.blit(textsurface, (20, 20))
+                for draw in drawable:
+                    draw.draw(screen)
+                player.draw_lives(screen, lives)
+                dt = clock.tick(60)/1000
+                pygame.display.flip()
+    print("Final Score:", score)
+    exit(1)    
 
 
 if __name__ == "__main__":

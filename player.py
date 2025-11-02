@@ -5,11 +5,11 @@ from shot import Shot
 
 class Player(CircleShape):
     PLAYER_SHOOT_COOLDOWN = 0.3
-    def __init__(self, x, y, explosion_sound):
+    def __init__(self, x, y, shot_sound):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.timer = 0
-        self.explosion_sound = explosion_sound
+        self.shot_sound = shot_sound
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
@@ -43,7 +43,7 @@ class Player(CircleShape):
         self.timer = self.PLAYER_SHOOT_COOLDOWN
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        self.explosion_sound.play()
+        self.shot_sound.play()
     def draw_lives(self, screen, lives):
         for i in range(lives):
             offset = i * (self.radius * 2 + 10)
