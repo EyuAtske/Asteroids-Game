@@ -16,7 +16,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def main():
-    os.environ['SDL_AUDIODRIVER'] = 'dummy'  
+    # os.environ['SDL_AUDIODRIVER'] = 'dummy' 
     pygame.init()
     audio_enabled = False
     try:
