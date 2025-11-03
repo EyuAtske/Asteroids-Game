@@ -5,6 +5,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from explotion import Explotion
 from loadscreen import LoadScreen
 
 def main():
@@ -37,10 +38,12 @@ def main():
         drawable = pygame.sprite.Group()
         asteroids = pygame.sprite.Group()
         shot = pygame.sprite.Group()
+        explode = pygame.sprite.Group()
         Player.containers = (updatable, drawable)
         Asteroid.containers = (asteroids, updatable, drawable)
         AsteroidField.containers = (updatable)
         Shot.containers = (shot, updatable, drawable)
+        Explotion.containers = (explode, updatable, drawable)
         player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, shot_sound)
         af = AsteroidField()
         while lives > 0:
@@ -53,6 +56,7 @@ def main():
                 for ast in asteroids:
                     if ast.isColliding(player):
                         run = False
+                        player.explode(explosion_sound)
                         ast.kill()
                         break
                 if not run:
@@ -62,7 +66,7 @@ def main():
                     for sh in shot:
                         if ast.isColliding(sh):
                             score += ast.points()
-                            explosion_sound.play()
+                            ast.explode(explosion_sound)
                             ast.split()
                             sh.kill()
                 screen.blit(background, (0, 0))

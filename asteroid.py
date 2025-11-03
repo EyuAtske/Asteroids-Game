@@ -1,10 +1,12 @@
 from circleshape import *
-from constants import ASTEROID_MIN_RADIUS
+from constants import ASTEROID_MIN_RADIUS, PLAYER_SHOOT_SPEED
+from explotion import Explotion
 import pygame
 import math
 import random
 
 class Asteroid(CircleShape):
+    Explode_Speed = PLAYER_SHOOT_SPEED / 4
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
     def draw(self, screen):
@@ -40,3 +42,13 @@ class Asteroid(CircleShape):
             return 20
         else:
             return 30
+    def explode(self, explosion_sound):
+        shot = Explotion(self.position.x, self.position.y)
+        shot1 = Explotion(self.position.x, self.position.y)
+        shot2 = Explotion(self.position.x, self.position.y)
+        shot3 = Explotion(self.position.x, self.position.y)
+        shot.velocity = pygame.Vector2(0,1) * self.Explode_Speed
+        shot1.velocity = pygame.Vector2(1,0) * self.Explode_Speed
+        shot2.velocity = pygame.Vector2(0,-1) * self.Explode_Speed
+        shot3.velocity = pygame.Vector2(-1,0) * self.Explode_Speed
+        explosion_sound.play()
