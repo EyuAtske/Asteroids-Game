@@ -85,7 +85,7 @@ def main():
                 dt = clock.tick(60)/1000
                 pygame.display.flip()
     print("Final Score:", score)
-    exit(1)    
+    sys.exit()    
 
 
 if __name__ == "__main__":
