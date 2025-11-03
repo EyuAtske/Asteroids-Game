@@ -1,5 +1,5 @@
 import pygame
-import os
+import os, sys
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -7,6 +7,13 @@ from asteroidfield import AsteroidField
 from shot import Shot
 from explotion import Explotion
 from loadscreen import LoadScreen
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def main():
     os.environ['SDL_AUDIODRIVER'] = 'dummy'  
@@ -20,10 +27,10 @@ def main():
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    background = pygame.image.load("space.jpg").convert()
+    background = pygame.image.load(resource_path("space.jpg")).convert()
     background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    shot_sound = pygame.mixer.Sound("sounds/shot.mp3")
-    explosion_sound = pygame.mixer.Sound("sounds/explosion.mp3")
+    shot_sound = pygame.mixer.Sound(resource_path("sounds/shot.mp3"))
+    explosion_sound = pygame.mixer.Sound(resource_path("sounds/explosion.mp3"))
     dt = 0
     score = 0
     font = pygame.font.Font(None, 48)

@@ -1,5 +1,13 @@
 import pygame
 from constants import *
+import os, sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class LoadScreen:
     def __init__(self, screen):
@@ -7,7 +15,7 @@ class LoadScreen:
         self.clock = pygame.time.Clock()
 
         # Load background
-        self.background = pygame.image.load("space.jpg").convert()
+        self.background = pygame.image.load(resource_path("space.jpg")).convert()
         self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         # Fonts
