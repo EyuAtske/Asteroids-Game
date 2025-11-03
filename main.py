@@ -25,22 +25,24 @@ def main():
     explosion_sound = pygame.mixer.Sound("sounds/explosion.mp3")
     dt = 0
     score = 0
-    lives = 3
     font = pygame.font.Font(None, 48)
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
-    shot = pygame.sprite.Group()
-    Player.containers = (updatable, drawable)
-    Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = (updatable)
-    Shot.containers = (shot, updatable, drawable)
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, shot_sound)
-    af = AsteroidField()
     load = LoadScreen(screen)
-    repet = load.display(score)
+    repet = 'y'
     while repet.lower() == 'y':
         repet = load.display(score)
+        lives = 3
+        if repet.lower() != 'y':
+            break
+        updatable = pygame.sprite.Group()
+        drawable = pygame.sprite.Group()
+        asteroids = pygame.sprite.Group()
+        shot = pygame.sprite.Group()
+        Player.containers = (updatable, drawable)
+        Asteroid.containers = (asteroids, updatable, drawable)
+        AsteroidField.containers = (updatable)
+        Shot.containers = (shot, updatable, drawable)
+        player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, shot_sound)
+        af = AsteroidField()
         while lives > 0:
             run = True
             while run:
