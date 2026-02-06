@@ -18,7 +18,11 @@ def resource_path(relative_path):
 def main():
     # os.environ['SDL_AUDIODRIVER'] = 'dummy' 
     pygame.init()
+
     audio_enabled = False
+    shot_sound = None
+    explosion_sound = None
+
     try:
         pygame.mixer.init()
         audio_enabled = True
@@ -27,10 +31,13 @@ def main():
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+
     background = pygame.image.load(resource_path("space.jpg")).convert()
     background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    shot_sound = pygame.mixer.Sound(resource_path("sounds/shot.mp3"))
-    explosion_sound = pygame.mixer.Sound(resource_path("sounds/explosion.mp3"))
+
+    if audio_enabled:
+        shot_sound = pygame.mixer.Sound(resource_path("sounds/shot.mp3"))
+        explosion_sound = pygame.mixer.Sound(resource_path("sounds/explosion.mp3"))
     dt = 0
     score = 0
     font = pygame.font.Font(None, 48)
@@ -89,4 +96,7 @@ def main():
 
 
 if __name__ == "__main__":
+    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
+    print(f"Screen width: {SCREEN_WIDTH}")
+    print(f"Screen height: {SCREEN_HEIGHT}")
     main()
